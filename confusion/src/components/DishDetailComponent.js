@@ -4,17 +4,24 @@ import {Link} from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { Control, Form, Errors, actions } from 'react-redux-form';
 import { baseUrl } from '../shared/baseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 function RenderDish({dish}) {
     return(
         <div className="col-md-5 col-12 m-1">
-            <Card  key={dish.id}>
-                <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
+            <FadeTransform
+                in
+                transformProps={{
+                    exitTransform: 'scale(0.5) translateY(-50%)'
+                }}>
+                <Card  key={dish.id}>
+                    <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+                    <CardBody>
+                        <CardTitle>{dish.name}</CardTitle>
+                        <CardText>{dish.description}</CardText>
+                    </CardBody>
+                 </Card>
+            </FadeTransform>
         </div>
     )
 }
@@ -38,16 +45,20 @@ class RenderComments extends Component {
     render(){
         return (
             <div className="col-md-5 col-12 m-1">
-                {this.props.comments.map(comment => {
-                    return(
-                    <li className="comments text-left m-2 mb-5" style={{listStyleType: "none"}}>
-                        <p>{comment.comment}</p>
-                        <author>-- {comment.author}</author>, 
-                        <date>{ comment.date }</date>
-                    </li>
-                    )
-                    })
-                }
+                <Stagger in>
+                        {this.props.comments.map((comment) => {
+                            return (
+                                <Fade in>
+                                    <li className="comments text-left m-2 mb-5" style={{listStyleType: "none"}}>
+                                        <p>{comment.comment}</p>
+                                        <author>-- {comment.author}</author>, 
+                                        <date>{ comment.date }</date>
+                                    </li>
+                                </Fade>
+                                );
+                            })}
+                        </Stagger>
+
             <Nav className="ml-auto" navbar>
                 <NavItem>
                     <Button onClick={this.toggleModal}><span className="fa fa-comment fa-lg"></span> Submit Comment</Button>
