@@ -35,12 +35,31 @@ function RenderLeader({ leader }) {
 
 function About(props) {
 
-    const leaders = props.leaders.map((leader) => {
+    const leaders = (() => {
+        if (props.leaders.isLoading) {
+          return (
+            <div className="container">
+              <div className="row">
+                <Loading />
+              </div>
+            </div>
+          );
+        }
+        else if (props.leaders.errMess) {
+          return (
+            <div className="container">
+              <div className="row">
+                <h4>{props.leaders.errMess}</h4>
+              </div>
+            </div>
+          );
+        }
+        else {
         return (
             <Fade in>
                 <RenderLeader leader={leader} key={leader.id} className="col-12 mt-5" />
             </Fade>
-        );
+        );}
     });
 
     return (
